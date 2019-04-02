@@ -1,20 +1,12 @@
 FROM docker.io/openshift/jenkins-slave-base-centos7:v3.11
-LABEL maintainer="Okky Hendriansyah <okky.htf@gmail.com>"
-MAINTAINER Gabe Montero <gmontero@redhat.com>
 
-ENV MAVEN_VERSION=3.5 \
-    GRADLE_VERSION=4.2.1 \
-    BASH_ENV=/usr/local/bin/scl_enable \
-    ENV=/usr/local/bin/scl_enable \
-    PROMPT_COMMAND=". /usr/local/bin/scl_enable" \
-    PATH=$PATH:/opt/gradle/bin
+LABEL maintainer="Okky Hendriansyah <okky.htf@gmail.com>"
 
 # Install Golang
-RUN yum -y update && yum clean all
-
-RUN mkdir -p /go && chmod -R 777 /go && \
-    yum install -y centos-release-scl && \
-    yum -y install git go-toolset-7-golang && yum clean all
+RUN yum update -y \
+ && yum install -y centos-release-scl git go-toolset-7-golang \
+ && yum clean all \
+ && mkdir -p /go
 
 ENV GOPATH=/go \
     BASH_ENV=/opt/rh/go-toolset-7/enable \
@@ -23,7 +15,6 @@ ENV GOPATH=/go \
 
 WORKDIR /go
 
-RUN chown -R 1001:0 $HOME && \
-    chmod -R g+rw $HOME
+RUN chgrp -R 0 /go \
+ && chmod -R g=u /go
 
-USER 1001
