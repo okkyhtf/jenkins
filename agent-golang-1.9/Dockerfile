@@ -5,7 +5,8 @@ LABEL maintainer="Okky Hendriansyah <okky.htf@gmail.com>"
 ENV VERSION=1.9.7 \
     OS=linux \
     ARCH=amd64 \
-    GOPATH=/go
+    GOPATH=/go \
+    PROMPT_COMMAND="source /etc/profile"
 
 RUN true \
  && set -xe \
@@ -19,8 +20,6 @@ RUN true \
  && tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz \
  && rm go$VERSION.$OS-$ARCH.tar.gz \
  && echo "export PATH=$PATH:/usr/local/go/bin" >> /etc/profile \
- && source /etc/profile \
- && go version \
  && true
 
 WORKDIR /go
